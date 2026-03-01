@@ -1,4 +1,4 @@
-# Multimodal Emotion Timeline MVP
+# Multimodal Emotion Enhanced Transcription Bot
 
 A lightweight Python MVP for video-based emotion timeline generation.
 
