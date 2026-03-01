@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Realtime STT Demo</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; }
+    .wrap { max-width: 900px; margin: 30px auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; }
+    button { margin-right: 8px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; cursor: pointer; }
+    pre { white-space: pre-wrap; background: #0f172a; color: #f8fafc; border-radius: 10px; padding: 14px; min-height: 180px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>ElevenLabs Realtime STT Demo</h2>
+    <p>This streams microphone PCM chunks from your browser to ElevenLabs Realtime STT (client-side websocket).</p>
+    <div>
+      <button id="startBtn">Start</button>
+      <button id="stopBtn" disabled>Stop</button>
+    </div>
+    <p id="status">status: idle</p>
+    <h4>Partial Transcript</h4>
+    <pre id="partial"></pre>
+    <h4>Committed Transcript</h4>
+    <pre id="final"></pre>
+    <p><a href="/">Back</a></p>
+  </div>
+  <script src="/static/realtime.js"></script>
+</body>
+</html>

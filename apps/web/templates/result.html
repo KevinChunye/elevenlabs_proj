@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Run {{ run_id }}</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; }
+    .wrap { max-width: 880px; margin: 36px auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 22px; }
+    code { background: #e2e8f0; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Analysis Complete</h2>
+    <p>Run ID: <code>{{ run_id }}</code></p>
+
+    {% if stt_error %}
+    <p style="color:#b91c1c">STT warning: {{ stt_error }}</p>
+    {% endif %}
+
+    <ul>
+      <li><a href="{{ viewer_url }}" target="_blank">Open Viewer HTML</a></li>
+      <li><a href="{{ transcript_url }}" target="_blank">Open transcript.json</a></li>
+      <li><a href="{{ emotions_url }}" target="_blank">Open emotions.json</a></li>
+    </ul>
+
+    <iframe src="{{ viewer_url }}" style="width:100%;height:620px;border:1px solid #e2e8f0;border-radius:10px"></iframe>
+
+    <p><a href="/">Analyze another file</a></p>
+  </div>
+</body>
+</html>

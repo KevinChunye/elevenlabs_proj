@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Emotion Inference MVP</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; }
+    .wrap { max-width: 840px; margin: 36px auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 22px; }
+    input, select, button { font-size: 14px; padding: 8px; }
+    button { background: #0ea5e9; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    .row { margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Video Emotion Inference (MVP)</h2>
+    <p>Upload an mp4/mov, transcribe with ElevenLabs Batch STT, run multimodal emotion inference, and generate timeline outputs.</p>
+
+    <form action="/analyze" method="post" enctype="multipart/form-data">
+      <div class="row">
+        <label>Video file (mp4/mov)</label><br />
+        <input type="file" name="video" accept="video/mp4,video/quicktime" required />
+      </div>
+      <div class="row">
+        <label>Taxonomy</label><br />
+        <select name="taxonomy">
+          <option value="ekman">Paul Ekman</option>
+          <option value="plutchik">Robert Plutchik</option>
+          <option value="pucek">Pucek</option>
+        </select>
+      </div>
+      <button type="submit">Analyze Video</button>
+    </form>
+
+    <p style="margin-top:20px">
+      Realtime demo: <a href="/realtime">/realtime</a>
+    </p>
+  </div>
+</body>
+</html>

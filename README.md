@@ -1,44 +1,70 @@
-# Pucek Emotion Inference Engine
+# Multimodal Emotion Timeline MVP
 
-This repository contains a rule-based multimodal emotion inference engine that maps time segments to **Pucek taxonomy** labels.
+A lightweight Python MVP for video-based emotion timeline generation.
 
-## Taxonomy
-- Core: `joy`, `sadness`, `anger`, `fear`, `disgust`, `surprise`
-- Social/complex: `confidence`, `anxiety`, `boredom`, `engagement`, `confusion`, `frustration`
-- Dimensional: `valence` in `[-1,1]`, `arousal` in `[0,1]`
+## What it does
+- Accepts local `mp4`/`mov` via CLI or web UI
+- Extracts audio with `ffmpeg`
+- Transcribes speech with ElevenLabs STT (batch)
+- Runs multimodal inference:
+  - audio prosody-based emotion baseline
+  - face + pose signals (MediaPipe)
+- Fuses results into per-segment labels using selectable taxonomy:
+  - `ekman` (default)
+  - `plutchik`
+  - `pucek`
+- Generates outputs per run:
+  - `outputs/<run_id>/transcript.json`
+  - `outputs/<run_id>/emotions.json`
+  - `outputs/<run_id>/viewer.html`
 
-## Input
-Provide JSON with a `segments` list. Each segment can include:
-- `start`, `end`, `speaker_id`
-- `transcript`
-- `audio` (`pitch_z`, `energy`, `speaking_rate_wps`, `pause_ratio`, ...)
-- `vision.face` (`aus`, `gaze`, `head_movement`)
-- `vision.gesture` (`posture`, `hand_motion`, `fidgeting`, `movement_level`)
+## Project layout
+- `apps/cli` CLI runner (`run`, `smoke`, `realtime`)
+- `apps/web` tiny FastAPI upload UI + realtime demo page
+- `packages/core` pipeline, feature extraction, fusion, schemas
+- `tests` minimal schema/fusion tests
 
-Use [`sample_input.json`](/Users/haochuanwang/Desktop/Research/sundai_hack/audio_mar1/sample_input.json) as a template.
-
-## Run
+## Quick start
 ```bash
-python emotion_inference_engine.py sample_input.json
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
 ```
 
-Optional file output:
+Install `ffmpeg` / `ffprobe` first (e.g., `brew install ffmpeg`).
+
+Set environment:
+- `ELEVENLABS_API_KEY`
+- Optional: `ELEVENLABS_MODEL_ID` (defaults to `scribe_v2`)
+
+## CLI
+Analyze a local video:
 ```bash
-python emotion_inference_engine.py sample_input.json --output output.json
+python apps/cli/main.py run --video /absolute/path/video.mp4 --taxonomy ekman
 ```
 
-## Output format
-Machine-readable JSON:
-- `primary_emotion` (`"uncertain"` if weak/conflicting evidence)
-- `emotions` (top candidates + confidence)
-- `confidence` (0-1)
-- `supporting_cues` split by `voice`, `face`, `gesture`, `language`
-- `valence`, `arousal`
-- `diagnostics` (`agreement`, modality coverage, score separation)
-- `uncertainty_reason` when applicable
+Smoke test:
+```bash
+python apps/cli/main.py smoke
+```
 
-## Inference behavior
-- Uses weighted multimodal fusion (voice/face/language/gesture)
-- Prefers cross-modality agreement
-- Applies per-speaker temporal smoothing to reduce jitter
-- Caps confidence when evidence is weak or contradictory
+Realtime demo mode:
+```bash
+python apps/cli/main.py run --realtime --host 127.0.0.1 --port 8000
+```
+
+## Web UI
+```bash
+uvicorn apps.web.main:app --host 127.0.0.1 --port 8000
+```
+Open `http://127.0.0.1:8000`.
+
+## Tests
+```bash
+python -m unittest discover -s tests -p "test_*.py"
+```
+
+## Security
+- No API keys are committed.
+- `.env` is ignored by git.
