@@ -64,7 +64,3 @@ Open `http://127.0.0.1:8000`.
 ```bash
 python -m unittest discover -s tests -p "test_*.py"
 ```
-
-## Security
-- No API keys are committed.
-- `.env` is ignored by git.
